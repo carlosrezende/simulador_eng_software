@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="theme.css">
+
+        <style>
+            #divPrincipal {
+                background-color: yellow;
+                width: 500px;
+                height: 300px;
+                position: absolute;
+                top: 0; bottom: 0;
+                left: 0; right: 0;
+                margin: auto;
+                background-color: rgba(255, 255, 255, 0.6);
+                font-family: Verdana;
+
+            }
+            #divLogo{
+                width: 400px;
+                height: 100px;
+                background-image: url("images/logo.png");
+            }
+            #divBtnAdmin{
+                top:30px;
+                right:30px;
+                position: absolute;
+
+            }
+            #btnLoginAdmin{
+                background-color: rgba(0, 0, 0, 0.9);
+                color: rgba(255,255,255,1);
+                font-family: Verdana;
+            }
+            #btnGrande{
+                width: 300px;
+                height: 50px;
+                font-family: Verdana;
+                font-size: 25px;
+                background-color: rgba(80,64,140,1);
+                color: rgba(255,255,255,1);
+            }
+
+            body{
+                background-image: url(images/background.jpg);
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 100%;
+            }
+
+        </style>
+    </head>
+    <body >
+
+        <div id="divBtnAdmin">
+
+            <form name="Form ir para a página de admin" action="adminlogin.jsp">
+                <!--botão-->
+                <input id="btnLoginAdmin" type="submit" value="Área restrita"/> 
+            </form>
+
+        </div>
+
+        <div id="divPrincipal" align="center" >
+
+            <div id="divLogo"></div>
+            <br></br>            
+            <form name="Form ir para a página do simulador" action="simulador.jsp">
+                <!--botão-->
+                <input id="btnGrande" type="submit" value="Ir para simulador"/>            
+            </form>
+            <br></br>
+
+        </div>
+    </body>
+</html>
