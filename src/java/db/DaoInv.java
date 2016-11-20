@@ -1,4 +1,4 @@
-package simulador.jdbc;
+package db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,17 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import simulador.regras_de_negocio.Investimento;
+import business_rules.Investimento;
 
 /**
  * @author Carlos Henrique
  */
-public class DAO_Inv {
+public class DaoInv {
 
     // a conexão com o banco de dados
     private Connection connection;
 
-    public DAO_Inv() throws ClassNotFoundException {
+    public DaoInv() throws ClassNotFoundException {
         this.connection = new ConnectionFactory().getConnection();
     }
 
@@ -67,7 +67,7 @@ public class DAO_Inv {
                 // criando o objeto Investimento
 
                 Investimento inv = new Investimento();
-                
+
                 inv.setId(rs.getInt("id"));
                 inv.setNome(rs.getString("nome"));
                 inv.setValor(rs.getDouble("valor"));
@@ -86,17 +86,35 @@ public class DAO_Inv {
         }
     }
 
-    public void updateTaxa(Integer id, Double taxa) {
+    public Investimento getInvById(int id) {
+
+        List<Investimento> list = this.getList();
+        try {
+            for (Investimento investimento : list) {
+                if (investimento.getId() == id) {
+                    return investimento;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        return null;
+    }
+
+    public boolean updateTaxa(Integer id, Double taxa) {
         String sql = "update investimentos set taxa=? where id=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setDouble(1, taxa);
             stmt.setInt(2, id);
-            
+
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // throw new RuntimeException(e);
+            return false;
         }
+        return true;
     }
 }

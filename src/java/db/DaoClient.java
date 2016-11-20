@@ -1,19 +1,19 @@
-package simulador.jdbc;
+package db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import simulador.usuarios.Cliente;
+import users.Cliente;
 
 /**
  * @author Carlos Henrique
  */
-public class DAO_Cliente {
+public class DaoClient {
 
     // a conexão com o banco de dados
     private Connection connection;
 
-    public DAO_Cliente() throws ClassNotFoundException {
+    public DaoClient() throws ClassNotFoundException {
         this.connection = new ConnectionFactory().getConnection();
     }
 

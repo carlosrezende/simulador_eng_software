@@ -1,4 +1,4 @@
-package simulador.usuarios;
+package users;
 
 /**
  * @author Carlos Henrique

@@ -1,7 +1,9 @@
-<%@page import="simulador.regras_de_negocio.Investimento"%>
+
+<%@page import="db.IsValidChange"%>
+<%@page import="db.DaoInv"%>
+<%@page import="business_rules.Investimento"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="simulador.jdbc.DAO_Inv"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -10,116 +12,160 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <% 
 
-            if (session.getAttribute("usuario") == null) {
-                response.sendRedirect("admin_login.jsp");
-            } else if (session.getAttribute("usuario") == ("admin")) {
-                /*fica na página*/
+        <!--código para verificar se existe alguem logado-->
+        <%
+            /*evitar erro 500 e impedir que o usuário tente entrar direto na página admin por meio do link*/
+            if (session.getAttribute("level") != null) {
+
+                /*verificar se a pessoa logada é um admin*/
+                if (session.getAttribute("level") == ("3")) {
+                    /*permenece na página*/
+                } else {
+                    response.sendRedirect("index.jsp");
+                }
             } else {
-                response.sendRedirect("admin_login.jsp");
+                response.sendRedirect("index.jsp");
             }
         %>
-        
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
         <title>Alteração de taxas</title>
-        <link rel="stylesheet" type="text/css" href="css/alteracao_de_taxas.css">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+
+        <link rel="icon" href="img/favicon.png" />
+
     </head>
+
     <body>
 
-        <div id="menu" >
+        <nav id="menu">
+            <center>
+                <ul>
+                    <li>
+                        <a id="logoMenu" href="admin.jsp">                 
+                            <span>
+                                Fácilnvest                                
+                            </span>                         
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.jsp" class="btnHeaderMenu" id="lastBtnHeaderMenu">
+                            <span class="spanMenu">Sair</span>                          
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.jsp" class="btnHeaderMenu" id="firstBtnHeaderMenu">
+                            <span class="spanMenu">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <span id="spanShowLogin">
+                            Olá, <%
+                                if (session.getAttribute("login") != null) {
+                                    out.write(session.getAttribute("login").toString());
+                                }
+                            %>!
+                        </span>
+                    </li>
+                </ul>
+            </center>
+        </nav>
 
-            <form name="FormHome" action="index.jsp" method="POST">
-                <input id="btns" type="submit" value="Home" name="btnHome" />
-            </form>
+        <!------------------------------------------------------------------------------------------------->
 
-            <form name="FormIrParaAdmin" action="admin.jsp" method="POST">
-                <input id="btns" type="submit" value="Administrador" name="btnAdmin" />
-            </form>
-        </div>
+        <div id="below">
+            <div id="boxSimulador">
+                <center>
+                    <%
+                        /*Ao clicar no botão de alterar taxa*/
+                        if (request.getParameter("btnAlterar") != null) {
+                            if (request.getParameter("btnAlterar").equals("Alterar")) {
 
-        <div id="divMaior">
+                                /*pegar os dados*/
+                                String id, taxa;
+                                id = request.getParameter("dropId");
+                                taxa = request.getParameter("InputValue");
 
-            <div id="divMenor">
-                <p>
-                    Página para alterar as taxas de investimentos:
-                </p>
-                <%
-                    DAO_Inv dao = new DAO_Inv();
-                    List<Investimento> lista;
-                    lista = dao.getList();
-                    dao.closeConnection();
-                %>
-                <table id="tableTaxas">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Taxa</th>
-                    </tr>
-                    <%for (Investimento inv : lista) {%>
-                    <tr>
-                        <td><%out.print(inv.getId() + "");%></td>
-                        <td><%out.print(inv.getNome() + "");%></td>
-                        <td><%out.print(inv.getTaxa() + "");%></td>
-                    </tr><%}%>
-                </table>
+                                /*testar se o usuário digitou corretamente*/
+                                IsValidChange ivc = new IsValidChange();
 
-                <form name="FormParaAlterarTaxa" action="alteracao_de_taxas.jsp" method="POST">
-                    ID:<br>
-                    <input type="text" name="InputId" value="" size="25" />
-                    <br>
-                    Nova Taxa:<br>
-                    <input type="text" name="InputTaxa" value="" size="25" />
-                    <br>
-                    <input id="btnAlterarTaxa" type="submit" value="Alterar" name="btnAlterarTaxa" />
-                </form>
+                                if (ivc.isValid(id, taxa)) {
 
-                <%
-                    if (request.getParameter("btnAlterarTaxa") != null) {
-                        if (request.getParameter("btnAlterarTaxa").equals("Alterar")) {
-                            String id = request.getParameter("InputId");
-                            String taxa = request.getParameter("InputTaxa");
+                                    /*tentar atualizar no banco*/
+                                    DaoInv daoChange = new DaoInv();
+                                    Integer ID = ivc.getID();
+                                    Double TAXA = ivc.getTAXA();
 
-                            boolean continuar = true;
-                            Integer ID = new Integer(0);
-                            Double TAXA = new Double(0);
-                            try {
-                                ID = Integer.parseInt(id);
-                                TAXA = Double.parseDouble(taxa);
-                            } catch (Exception e) {
-                                continuar = false;
-                                e.printStackTrace();
-                            }
-
-                            if (continuar) {
-                                try {
-                                    DAO_Inv newDao = new DAO_Inv();
-                                    try {
-                                        newDao.updateTaxa(ID, TAXA);
-
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println("alert('A taxa foi alterada.');");
-                                        out.println("</script>");
-                                    } catch (Exception e) {
-
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println("alert('A taxa não foi alterada.');");
-                                        out.println("</script>");
-
-                                        e.printStackTrace();
-                                    } finally {
-                                        dao.closeConnection();
+                                    /*se conseguir atualizar*/
+                                    if (daoChange.updateTaxa(ID, TAXA)) {
+                                        out.write("<script>alert('");
+                                        out.write("A alteração foi realizada com sucesso.");
+                                        out.write("');</script>");
+                                    } else {
+                                        out.write("<script>alert('");
+                                        out.write("Ocorreu um erro. Atualize a página e tente novamente.");
+                                        out.write("');</script>");
                                     }
-                                } catch (Exception e) {
-                                    out.println("<script type=\"text/javascript\">");
-                                    out.println("alert('A taxa não foi alterada.');");
-                                    out.println("</script>");
-                                    e.printStackTrace();
+                                    /*fechar conexão*/
+                                    daoChange.closeConnection();
+                                } /*imprimir informações sobre dados errados*/ else {
+                                    out.write("<script>alert('");
+                                    out.write(ivc.getMessage());
+                                    out.write("');</script>");
                                 }
                             }
                         }
-                    }
-                %>
+                    %>
+
+                    <!--CRIAR TABELA COM OS INVESTIMENTOS-->
+
+                    <span class="spanInfoInput">Tipos de investimento</span><br>
+                    <%
+                        DaoInv dao = new DaoInv();
+                        List<Investimento> list;
+                        list = dao.getList();
+                        dao.closeConnection();
+                    %>
+                    <table>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Valor mínimo</th>
+                            <th>Valor atual da taxa</th>
+                        </tr>
+                        <%for (Investimento i : list) {%>
+                        <tr>
+                            <td><% out.write(i.getNome()); %></td>
+                            <%
+                                String vMin = Double.toString(i.getValor_minimo());
+                                vMin = vMin.replace(".", ",");
+                            %>
+                            <td>R$ <% out.write(vMin); %></td>
+                            <%
+                                String taxa = Double.toString(i.getTaxa());
+                                taxa = taxa.replace(".", ",");
+                            %>
+                            <td><% out.write(taxa); %> %</td>
+                        </tr>
+                        <%}%>
+                    </table>
+
+                    <form name="FormSimular" action=""  method="POST">
+                        <br>Selecione o investimento:<br>
+                        <select name="dropId" class="dropSimulador">
+                            <%for (Investimento i : list) {%>
+                            <option value="<%out.write(Integer.toString(i.getId()));%>">
+                                <%out.write(i.getNome());%>
+                            </option>
+                            <%}%>
+                        </select>
+                        <br>Nova taxa:<br>
+                        <input class="inputSimulador" type="text" name="InputValue" value="" size="55" /><br>
+                        <input class="btnAlterar" type="submit" value="Alterar" name="btnAlterar"/>
+                    </form>
+                </center>
             </div>
         </div>
     </body>

@@ -1,5 +1,6 @@
-<%@page import="simulador.jdbc.DAO_Inv"%>
-<%@page import="simulador.regras_de_negocio.Investimento"%>
+<%@page import="db.IsValidInv"%>
+<%@page import="business_rules.Investimento"%>
+<%@page import="db.DaoInv"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page session="true"%>
@@ -7,165 +8,128 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <% 
 
-            if (session.getAttribute("usuario") == null) {
-                response.sendRedirect("admin_login.jsp");
-            } else if (session.getAttribute("usuario") == ("admin")) {
-                /*fica na página*/
+        <!--código para verificar se existe alguem logado-->
+        <%
+            /*evitar erro 500 e impedir que o usuário tente entrar direto na página admin por meio do link*/
+            if (session.getAttribute("level") != null) {
+
+                /*verificar se a pessoa logada é um admin*/
+                if (session.getAttribute("level") == ("3")) {
+                    /*permenece na página*/
+                } else {
+                    response.sendRedirect("index.jsp");
+                }
             } else {
-                response.sendRedirect("admin_login.jsp");
+                response.sendRedirect("index.jsp");
             }
         %>
-        
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Cadastro de investimento</title>
-        <link rel="stylesheet" type="text/css" href="css/cadastro_de_investimento.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="icon" href="img/favicon.png" />
     </head>
     <body>
-        <div id="menu" >
+        <nav id="menu">
+            <center>
+                <ul>
+                    <li>
+                        <a id="logoMenu" href="admin.jsp">                 
+                            <span>
+                                Fácilnvest                                
+                            </span>                         
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.jsp" class="btnHeaderMenu" id="lastBtnHeaderMenu">
+                            <span class="spanMenu">Sair</span>                          
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.jsp" class="btnHeaderMenu" id="firstBtnHeaderMenu">
+                            <span class="spanMenu">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <span id="spanShowLogin">
+                            Olá, <%
+                                if (session.getAttribute("login") != null) {
+                                    out.write(session.getAttribute("login").toString());
+                                }
+                            %>!
+                        </span>
+                    </li>
+                </ul>
+            </center>
+        </nav>
 
-            <form name="FormHome" action="index.jsp" method="POST">
-                <input id="btns" type="submit" value="Home" name="btnHome" />
-            </form>
+        <div id="below">
+            <div id="boxCadInv">
+                <center>
+                    <span  class="spanInfoInput">Formulário para cadastrar novo Investimento</span>
 
-            <form name="FormIrParaAdmin" action="admin.jsp" method="POST">
-                <input id="btns" type="submit" value="Administrador" name="btnAdmin" />
-            </form>
-        </div>
-        <div id="divCadastrarInvestimento">
-            Formulário para cadastrar novo Investimento
-            <div id="subDivCadastrarInvestimento">
+                    <div id="subDivCadastrarUsuario">
+                        <form name="FormCadastrarInvestimento" action="#" method="POST">
+                            Nome:<br>
+                            <input class="inputCadUser" type="text" name="InputNome" value="" size="55" /><br>
+                            Valor mínimo:<br>
+                            <input class="inputCadUser" type="text" name="InputValorMin" value="" size="55" /><br>
+                            Taxa: (% ao mês):<br>
+                            <input class="inputCadUser" type="text" name="InputTaxa" value="" size="55" /><br>
 
-                <form name="FormCadastrarInvestimento" action="#" method="POST">
-                    Nome:<br>
-                    <input type="text" name="InputNome" value="" size="55" /><br>
-                    Valor:<br>
-                    <input type="text" name="InputValor" value="" size="55" /><br>
-                    Valor mínimo:<br>
-                    <input type="text" name="InputValorMin" value="" size="55" /><br>
-                    Taxa: (% ao mês)<br>
-                    <input type="text" name="InputTaxa" value="" size="55" /><br>
-                    Tempo: (Meses)<br>
-                    <input type="text" name="InputTempo" value="" size="55" /><br>
-
-                    <input id="btnCadastrarInvestimento" type="submit" value="Cadastrar Investimento" name="btnCadastrarInvestimento"/>
-                </form>
+                            <input class="btnCadInv" type="submit" value="Cadastrar Investimento" name="btnCadastrarInvestimento"/>
+                        </form>
+                    </div>
+                </center>
             </div>
         </div>
+
 
         <%
             /*ao clicar no botão*/
             if (request.getParameter("btnCadastrarInvestimento") != null) {
                 if (request.getParameter("btnCadastrarInvestimento").equals("Cadastrar Investimento")) {
 
-                    /*criar investimento*/
-                    Investimento inv = new Investimento();
+                    IsValidInv ivi = new IsValidInv();
+                    String nome, vMin, taxa;
+                    nome = request.getParameter("InputNome").toString();
+                    vMin = request.getParameter("InputValorMin").toString();
+                    taxa = request.getParameter("InputTaxa").toString();
 
-                    /*setar os atributos*/
-                    inv.setNome(request.getParameter("InputNome"));
-
-                    boolean continuar = true;
-
-                    /*setar valor*/
-                    Double valor = new Double(0);
-                    try {
-                        valor = Double.parseDouble(request.getParameter("InputValor"));
-                        inv.setValor(valor);
-                    } catch (Exception e) {
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('O valor foi inserido de forma errada.');");
-                        out.println("</script>");
-                        e.printStackTrace();
-                        continuar = false;
-                    }
-
-                    /*setar valor mínimo*/
-                    Double valorMin = new Double(0);
-                    if (continuar) {
+                    /*se os dados inseridos são válidos*/
+                    if (ivi.isValid(nome, vMin, taxa)) {
+                        DaoInv dao = new DaoInv();
                         try {
-                            valorMin = Double.parseDouble(request.getParameter("InputValorMin"));
-                            inv.setValor_minimo(valorMin);
-                        } catch (Exception e) {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('O valor mínimo foi inserido de forma errada.');");
-                            out.println("</script>");
-                            e.printStackTrace();
-                            continuar = false;
-                        }
-                    }
+                            /*criar objeto para adicionar no banco*/
+                            Investimento inv = new Investimento();
+                            inv.setNome(nome.toString());
+                            inv.setValor_minimo(Double.parseDouble(vMin.toString().replaceFirst(",", ".")));
+                            inv.setTaxa(Double.parseDouble(taxa.toString().replaceFirst(",", ".")));
 
-                    if (continuar) {
-                        /*verificar se o valor mínimo é menor ou igual ao valor*/
-                        if (valor.compareTo(valorMin) >= 0) {
-                            continuar = true;
-                        } else {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('O valor do investimento não pode ser menor que o valor mínimo.');");
-                            out.println("</script>");
-                            continuar = false;
-                        }
-                    }
+                            /*tentar inserir*/
+                            dao.insert(inv);
 
-
-                    /*setar taxa*/
-                    if (continuar) {
-                        try {
-                            Double taxa = Double.parseDouble(request.getParameter("InputTaxa"));
-                            inv.setTaxa(taxa);
-                        } catch (Exception e) {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('O valor da taxa foi inserido de forma errada.');");
-                            out.println("</script>");
-                            e.printStackTrace();
-                            continuar = false;
-                        }
-                    }
-
-                    /*setar tempo*/
-                    if (continuar) {
-                        try {
-                            Integer tempo = Integer.parseInt(request.getParameter("InputTempo"));
-                            inv.setTempo(tempo);
-                        } catch (Exception e) {
-                            out.println("<script type=\"text/javascript\">");
-                            out.println("alert('O tempo foi inserido de forma errada.');");
-                            out.println("</script>");
-                            e.printStackTrace();
-                            continuar = false;
-                        }
-                    }
-
-                    if (continuar) {
-
-                        try {
-                            /*criar um objeto para adicionar um investimento no banco*/
-                            DAO_Inv dao = new DAO_Inv();
-
-                            try {
-                                /*inserir o investimento no banco*/
-                                dao.insert(inv);
-
-                                out.println("<script type=\"text/javascript\">");
-                                out.println("alert('O Investimento foi cadastrado com sucesso.');");
-                                out.println("</script>");
-
-                            } catch (Exception e) {
-
-                                e.printStackTrace();
-
-                                out.println("<script type=\"text/javascript\">");
-                                out.println("alert('Erro ao cadastrar investimento.');");
-                                out.println("</script>");
-
-                            } finally {
-                                /*encerrar a conexão*/
-                                dao.closeConnection();
-                            }
+                            /*mostrar mensagem de sucesso*/
+                            out.write("<script>alert('");
+                            out.write("O investimento " + nome + " foi cadastrado com sucesso.");
+                            out.write("');</script>");
 
                         } catch (Exception e) {
+                            /*se acontecer algum erro*/
                             e.printStackTrace();
+                            out.write("<script>alert('");
+                            out.write("Ocorreu um erro ao cadastrar o investimento.");
+                            out.write("');</script>");
+                        } finally {
+                            /*fechar conexão com o banco*/
+                            dao.closeConnection();
                         }
+                    } else {
+                        /*se existir algum dado inválido*/
+                        out.write("<script>alert('");
+                        out.write(ivi.getMessage());
+                        out.write("');</script>");
                     }
                 }
             }

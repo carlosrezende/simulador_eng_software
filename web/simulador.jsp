@@ -1,6 +1,8 @@
-<%@page import="simulador.jdbc.DAO_Inv"%>
+<%@page import="db.IsValidSimulation"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="business_rules.Investimento"%>
+<%@page import="db.DaoInv"%>
 <%@page import="java.util.List"%>
-<%@page import="simulador.regras_de_negocio.Investimento"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page session="true" %>
@@ -9,170 +11,185 @@
 <html>
     <head>
 
+        <!--código para verificar se existe alguem logado-->
         <%
-            if (session.getAttribute("usuario") == null) {
-                response.sendRedirect("usuario_login.jsp");
-            } else if (session.getAttribute("usuario") == ("user")) {
-                /*fica na página*/
+            /*evitar erro 500 e impedir que o usuário tente entrar direto na página user por meio do link*/
+            if (session.getAttribute("level") != null) {
+
+                /*verificar se a pessoa logada é um usuário*/
+                if (session.getAttribute("level") == ("2")) {
+                    /*permenece na página*/
+                } else {
+                    response.sendRedirect("index.jsp");
+                }
             } else {
-                response.sendRedirect("usuario_login.jsp");
+                response.sendRedirect("index.jsp");
             }
         %>
 
-        <script language="JavaScript">
+        <!--função para imprimir-->
+        <script>
             function imprimir(text) {
-                text = document
-                print(text)
+                text = document;
+                print(text);
             }
         </script>
 
-
-
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Simulador</title>
-        <link rel="stylesheet" type="text/css" href="css/simulador.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="icon" href="img/favicon.png" />
     </head>
     <body>
-
-        <div id="menu" >
-
-            <form name="FormHome" action="index.jsp" method="POST">
-                <input id="btns" type="submit" value="Home" name="btnHome" />
-            </form>
-
-            <form name="FormIrParaUsuario" action="usuario.jsp" method="POST">
-                <input id="btns" type="submit" value="Usuário" name="btnAdmin" />
-            </form>
-        </div>
-
-        <div id="divMaior">
-            <div id="divMenor">
-                <p>Página para alterar as taxas de investimentos:</p>
-                <%
-                    DAO_Inv dao = new DAO_Inv();
-                    List<Investimento> lista;
-                    lista = dao.getList();
-                    dao.closeConnection();
-                %>
-                <table id="tableInvs">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Valor Mínimo</th>
-                        <th>Taxa</th>
-                    </tr>
-                    <%for (Investimento inv : lista) {%>
-                    <tr>
-                        <td><%out.print(inv.getId() + "");%></td>
-                        <td><%out.print(inv.getNome() + "");%></td>
-                        <td><%out.print(inv.getValor_minimo() + "");%></td>
-                        <td><%out.print(inv.getTaxa() + "");%></td>
-                    </tr><%}%>
-                </table>
-
-                <form name="FormParaSimular" action="#" method="POST">
-
-                    ID:<br>
-                    <select name="InputId">
-                         <%for (Investimento inv : lista) {%>
-                    
-                      
-                    
-                    <option value='<%out.print(inv.getId());%>'><%out.print(inv.getNome() + "");%> </option>
-                    <%}%>
-                    <option></option>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                    </select>
-                   
-                    <br>
-
-                    Valor do investimento: (R$)<br>
-                    <input type="text" name="InputValor" value="" size="25" />
-                    <br>
-
-                    Tempo: (meses)<br>
-                    <input type="text" name="InputTempo" value="" size="25" />
-                    <br>
-
-                    <input id="btnSimular" type="submit" value="Simular" name="btnSimular" />
-                </form>
-
-                <%
-                    if (request.getParameter("btnSimular") != null) {
-                        if (request.getParameter("btnSimular").equals("Simular")) {
-                            String id = request.getParameter("InputId");
-                            String valor = request.getParameter("InputValor");
-                            String tempo = request.getParameter("InputTempo");
-
-                            boolean continuar = true;
-                            Integer ID = new Integer(0);
-                            Double VALOR = new Double(0);
-                            Integer TEMPO = new Integer(0);
-                            try {
-                                ID = Integer.parseInt(id);
-                                VALOR = Double.parseDouble(valor);
-                                TEMPO = Integer.parseInt(tempo);
-                            } catch (Exception e) {
-
-                                out.println("<script type=\"text/javascript\">");
-                                out.println("alert('Um ou mais campos foram digitados de forma errada.');");
-                                out.println("</script>");
-                                continuar = false;
-                                e.printStackTrace();
-                            }
-
-                            Investimento invest = new Investimento();
-                            Double lucro = new Double(0);
-                            if (continuar) {
-                                for (Investimento x : lista) {
-                                    if (ID.equals(x.getId())) {
-
-                                        if (VALOR.compareTo(x.getValor_minimo()) < 0) {
-                                            invest = null;
-                                        } else {
-                                            invest.setId(ID);
-                                            invest.setNome(x.getNome());
-                                            invest.setValor(VALOR);
-                                            invest.setValor_minimo(x.getValor_minimo());
-                                            invest.setTaxa(x.getTaxa());
-                                            invest.setTempo(TEMPO);
-                                            break;
-                                        }
-                                    }
+        <nav id="menu">
+            <center>
+                <ul>
+                    <li>
+                        <a id="logoMenu" href="user.jsp">                 
+                            <span>
+                                Fácilnvest                                
+                            </span>                         
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.jsp" class="btnHeaderMenu" id="lastBtnHeaderMenu">
+                            <span class="spanMenu">Sair</span>                          
+                        </a>
+                    </li>
+                    <li>
+                        <a href="user.jsp" class="btnHeaderMenu" id="firstBtnHeaderMenu">
+                            <span class="spanMenu">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <span id="spanShowLogin">
+                            Olá, <%
+                                if (session.getAttribute("login") != null) {
+                                    out.write(session.getAttribute("login").toString());
                                 }
-                                if (invest != null) {
-                %>
-                <table id="tableInvs">
-                    <tr>
-                        <th>Nome</th>
-                        <th>Valor do investimento</th>
-                        <th>Tempo do investimento</th>
-                        <th>Resultado</th>
-                    </tr>                    
-                    <tr>
-                        <td><%out.print(invest.getNome() + "");%></td>
-                        <td><%out.print(invest.getValor() + "");%></td>
-                        <td><%out.print(invest.getTempo() + "");%></td>
-                        <td><%out.print(invest.getValorTotal() + "");%></td>
-                    </tr>
-                </table>
-                <%
+                            %>!
+                        </span>
+                    </li>
+                </ul>
+            </center>
+        </nav>
 
+        <div id="below">
+            <div id="boxSimulador">
+                <center>
+                    <%
+                        if (request.getParameter("btnSimular") != null) {
+                            if (request.getParameter("btnSimular").equals("Simular")) {
+
+                                String id, valor, tempo;
+
+                                id = request.getParameter("dropId");
+                                valor = request.getParameter("InputValue");
+                                tempo = request.getParameter("InputTime");
+
+                                IsValidSimulation ivs = new IsValidSimulation();
+
+                                if (ivs.isValid(id, valor, tempo)) {
+
+                                    Investimento inv = ivs.getInvestment();
+                    %>
+
+                    <span class="spanInfoInput">Resultado da simulação</span><br>
+                    <table>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Valor</th>
+                            <th>Meses</th>
+                            <th>Resultado</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% out.write(inv.getNome()); %>
+                            </td>
+                            <td>
+                                <% out.write(inv.getValorString()); %>
+                            </td>
+                            <td>
+                                <% out.write(Integer.toString(inv.getTempo())); %>
+                            </td>
+                            <td>
+                                <% out.write(inv.getValorTotalString()); %>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <%
                                 } else {
-                                    out.println("<script type=\"text/javascript\">");
-                                    out.println("alert('O valor não pode ser menor que o valor mínimo e o ID digitado deve ser da tabela.');");
-                                    out.println("</script>");
+                                    out.write("<script>alert('");
+                                    out.write(ivs.getMessage());
+                                    out.write("');</script>");
                                 }
                             }
                         }
-                    }
-                %> 
-                <form>
-                    <input id="btnPrint" name="print" type="button" value="Imprimir esta página" onclick="imprimir()">
-                </form>
+                    %>
+
+
+                    <span class="spanInfoInput">Tipos de investimento</span><br>
+                    <%
+                        DaoInv dao = new DaoInv();
+                        List<Investimento> list;
+                        list = dao.getList();
+                        dao.closeConnection();
+                    %>
+                    <table>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Valor mínimo</th>
+                            <th>Lucro mensal</th>
+                        </tr>
+                        <%
+                            for (Investimento i : list) {
+                        %>
+                        <tr>
+                            <td><% out.write(i.getNome()); %></td>
+                            <%
+                                String vMin = Double.toString(i.getValor_minimo());
+                                vMin = vMin.replace(".", ",");
+                            %>
+                            <td>R$ <% out.write(vMin); %></td>
+                            <%
+                                String taxa = Double.toString(i.getTaxa());
+                                taxa = taxa.replace(".", ",");
+                            %>
+                            <td><% out.write(taxa); %> %</td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </table>
+
+
+
+                    <form name="FormSimular" action="#"  method="POST">
+                        <br>Selecione o tipo:<br>
+                        <select name="dropId" class="dropSimulador">
+                            <%for (Investimento i : list) {%>
+                            <option value="<%out.write(Integer.toString(i.getId()));%>">
+                                <%out.write(i.getNome());%>
+                            </option>
+                            <%}%>
+                        </select>
+                        <br>
+                        Valor do investimento:<br>
+                        <input class="inputSimulador" type="text" name="InputValue" value="" size="55" /><br>
+                        Quantidade de meses:<br>
+                        <input class="inputSimulador" type="text" name="InputTime" value="" size="55" />
+                        <br>
+                        <input class="btnSimulador" type="submit" value="Simular" name="btnSimular"/>
+                    </form>
+
+                    <form>
+                        <input class="btnSimulador" name="print" type="button" value="Imprimir página" onclick="imprimir()">
+                    </form>
+
+                </center>
             </div>
+
         </div>
     </body>
 </html>

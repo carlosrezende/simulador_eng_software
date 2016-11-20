@@ -1,4 +1,4 @@
-package simulador.regras_de_negocio;
+package business_rules;
 
 import java.text.DecimalFormat;
 
@@ -34,15 +34,21 @@ public class Investimento {
         for (int i = 1; i < tempo; i++) {
             lucro = lucro + (lucro * (taxa / 100.0));
         }
-        
+
         DecimalFormat df = new DecimalFormat("0.##");
         String dx = df.format(lucro);
-        
+
         dx = dx.replaceAll(",", ".");
-        
-        Double LUCRO = Double.parseDouble(dx);       
-        
+
+        Double LUCRO = Double.parseDouble(dx);
+
         return LUCRO;
+    }
+
+    public String getValorTotalString() {
+        String temp = Double.toString(this.getValorTotal());
+        temp = temp.replace(".", ",");
+        return temp;
     }
 
     public double getValorTotal(Investimento inv) {
@@ -98,6 +104,12 @@ public class Investimento {
      */
     public double getValor() {
         return valor;
+    }
+
+    public String getValorString() {
+        String temp = Double.toString(this.getValor());
+        temp = temp.replace(".", ",");
+        return temp;
     }
 
     /**

@@ -1,0 +1,607 @@
+@font-face {
+    font-family: 'DINBold';
+    src: url('din-bold-webfont.eot');
+    src: url('din-bold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('din-bold-webfont.woff') format('woff'),
+        url('din-bold-webfont.ttf') format('truetype'),
+        url('din-bold-webfont.svg#DINBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'DINLight';
+    src: url('din-light-webfont.eot');
+    src: url('din-light-webfont.eot?#iefix') format('embedded-opentype'),
+        url('din-light-webfont.woff') format('woff'),
+        url('din-light-webfont.ttf') format('truetype'),
+        url('din-light-webfont.svg#DINLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face { 
+    font-family: 'DINRegular';
+    src: url('din-regular-webfont.eot');
+    src: url('din-regular-webfont.eot?#iefix') format('embedded-opentype'),
+        url('din-regular-webfont.woff') format('woff'),
+        url('din-regular-webfont.ttf') format('truetype'),
+        url('din-regular-webfont.svg#DINRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'DINBlack';
+    src: url('din-black-webfont.eot');
+    src: url('din-black-webfont.eot?#iefix') format('embedded-opentype'),
+        url('din-black-webfont.woff') format('woff'),
+        url('din-black-webfont.ttf') format('truetype'),
+        url('din-black-webfont.svg#DINBlack') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+body {
+    font-family:'DINLight', Helvetica, Arial, sans-serif;
+    font-size:14px;
+    color: rgb(78,60,136);
+}
+#menu{
+    text-align: center;
+    padding-top: 3px;
+    width: 100%;
+    height: 90px;
+    background-color: #fff;
+}
+#menu ul {
+    padding:0px;
+    margin:0px;
+    list-style:none;
+}
+#menu ul li { 
+    display: inline; 
+}
+#menu ul li a {
+    display: inline-block;
+    text-decoration: none;
+}
+#menu ul li a:hover {
+
+}
+
+#firstBtnHeaderMenu{
+
+    float: right;
+    margin-right: 5px;
+
+
+}
+
+#lastBtnHeaderMenu{
+
+    margin-right: 25px;
+    float: right;
+
+
+}
+.btnHeaderMenu{
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 8px;
+    padding-left: 13px;
+    padding-right: 13px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnHeaderMenu:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnHeaderMenu:link {
+    text-decoration: none;
+}
+.btnHeaderMenu:active {
+    text-decoration: none;
+}
+.btnHeaderMenu:visited {
+    text-decoration: none;
+}
+
+.spanMenu{
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    color: rgb(255,255,255);
+}
+
+#logoMenu{        
+    padding-top: 3px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 45px;
+    float: left;
+    margin-left: 25px;
+}
+
+#logoMenu:hover{  
+    color: rgb(78,60,136);
+
+}
+
+#logoMenu:link {
+    color: rgb(78,60,136);
+    text-decoration: none;
+}
+#logoMenu:active {  
+    color: rgb(78,60,136);
+    text-decoration: none;
+}
+#logoMenu:visited {
+    color: rgb(78,60,136);
+    text-decoration: none;
+}
+
+#spanShowLogin{  
+    color: #000;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    float: right;
+    margin-right: 5px;
+    margin-top: 25px;
+
+}
+/**********************************/
+
+#boxMenu{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 500px;
+    height: 280px;
+    background-color: rgb(241,241,241);
+}
+
+
+#boxMenuUser{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 400px;
+    height: 200px;
+    background-color: rgb(241,241,241);
+}
+
+.btnMenu{
+    font-size: 35px;
+    color: #fff;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnMenu:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnMenu:link {
+    text-decoration: none;
+}
+.btnMenu:active {
+    text-decoration: none;
+}
+.btnMenu:visited {
+    text-decoration: none;
+}
+
+/**********************************/
+/*cabeçalho da página de login*/
+#topHeaderLogin{
+    text-align: center;
+    padding-top: 0px;
+    width: 100%;
+    height: auto;
+    /*background-color: rgb(0,255,255);*/
+}
+#logo{
+    text-align: center;
+    text-decoration: none;
+    font-size: 55px;
+}
+
+#below{
+    margin-top: -35px;;
+    width: 100%;
+    height: auto;
+    /*background-color: rgb(200,200,200);*/
+}
+#belowIndex{
+    margin-top: 0px;;
+    width: 100%;
+    height: auto;
+    /*background-color: rgb(200,200,200);*/
+}
+#boxLogin{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    padding:50px;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 300px;
+    height: 210px;
+    background-color: rgb(241,241,241);
+}
+#boxCadUser{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    padding:20px;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 500px;
+    height: 370px;
+    background-color: rgb(241,241,241);
+}
+#boxCadInv{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    padding:20px;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 500px;
+    height: 260px;
+    background-color: rgb(241,241,241);
+}
+#boxSimulador{
+    border: 1px solid rgb(78,60,136);
+    border-radius: 5px;
+
+    padding:20px;
+
+    color: #000;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width: 500px;
+    height: auto;
+    background-color: rgb(241,241,241);
+}
+#subBoxLogin{
+
+
+    text-align: center;      
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+
+    width:300px;
+    height: 200px;
+    background-color: rgb(241,241,241);
+}
+
+.spanInfoInput{
+
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    font-size: 22px;
+}
+
+.inputLogin{
+
+    border: 1px solid rgb(78,60,136);
+
+    /*border:0;*/
+
+    width: 280px;
+    height: 35px;
+    border-radius: 4px;
+}
+
+.inputCadUser{
+
+    border: 1px solid rgb(78,60,136);
+
+    /*border:0;*/
+    
+    font-size: 17px;
+    
+
+    width: 380px;
+    height: 35px;
+    border-radius: 4px;
+}
+/******************************************************/
+.inputSimulador{
+
+    border: 1px solid rgb(78,60,136);
+
+    font-size: 17px;
+    font-weight: bold;
+
+    width: 200px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.dropSimulador{
+
+    border: 1px solid rgb(78,60,136);
+
+    font-size: 17px;
+    font-weight: bold;
+
+    width: 200px;
+    height: 35px;
+    border-radius: 4px;
+}
+/******************************************************/
+
+.btnLogin{
+    width: 282px;
+    height: 50px;
+
+    margin-top: 10px;
+
+    border:0;
+
+    padding-top: 10px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    padding-right: 27px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(255,255,255);
+    font-size: 25px;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnLogin:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnLogin:link {
+    text-decoration: none;
+}
+.btnLogin:active {
+    text-decoration: none;
+}
+.btnLogin:visited {
+    text-decoration: none;
+}
+
+/*******************************************************************************/
+
+.btnCadInv{
+    width: 310px;
+    height: 50px;
+
+    margin-top: 10px;
+
+    border:0;
+
+    padding-top: 10px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    padding-right: 27px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(255,255,255);
+    font-size: 25px;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnCadInv:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnCadInv:link {
+    text-decoration: none;
+}
+.btnCadInv:active {
+    text-decoration: none;
+}
+.btnCadInv:visited {
+    text-decoration: none;
+}
+/********************************************************************************/
+.btnSimulador{
+    width: 200px;
+    height: 25px;
+
+    margin-top: 10px;
+
+    border:0;
+
+    padding-top: 10px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    padding-right: 27px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(255,255,255);
+    font-size: 15px;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnSimulador:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnSimulador:link {
+    text-decoration: none;
+}
+.btnSimulador:active {
+    text-decoration: none;
+}
+.btnSimulador:visited {
+    text-decoration: none;
+}
+
+/********************************************************************************/
+
+/********************************************************************************/
+.btnAlterar{
+    width: 200px;
+    height: 25px;
+
+    margin-top: 5px;
+
+    border:0;
+
+    padding-top: 8px;
+    padding-bottom: 35px;
+    padding-left: 25px;
+    padding-right: 27px;
+
+    background-color: rgb(78,60,136);
+    border-radius: 5px;    
+    box-sizing: border-box;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(255,255,255);
+    font-size: 25px;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnAlterar:hover{
+    background-color: rgb(0,200,179);
+    text-decoration: none;
+
+    -webkit-transition: 0.3s ease-in;
+    -moz-transition: 0.3s ease-in;
+    -o-transition: 0.3s ease-in
+}
+.btnAlterar:link {
+    text-decoration: none;
+}
+.btnAlterar:active {
+    text-decoration: none;
+}
+.btnAlterar:visited {
+    text-decoration: none;
+}
+
+/********************************************************************************/
+
+table {
+    background-color: #fff;
+    color: #000;
+    font-size: 15px;
+    font-weight: bold;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+/*rgb(78,60,136)*/
+
+tr:nth-child(even){
+    background-color: rgb(200,200,200);
+    color: #000;
+}
+
+th {
+    background-color: rgb(78,60,136);
+    color: white;
+}

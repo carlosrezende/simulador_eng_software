@@ -1,19 +1,16 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <%@page session="true" %>
 
 <!DOCTYPE html>
 <html>
-    <head>
-
+    <head>        
         <!--código para verificar se existe alguem logado-->
         <%
-            /*evitar erro 500 e impedir que o usuário tente entrar direto na página admin por meio do link*/
+            /*evitar erro 500 e impedir que o usuário tente entrar direto na página user por meio do link*/
             if (session.getAttribute("level") != null) {
 
-                /*verificar se a pessoa logada é um admin*/
-                if (session.getAttribute("level") == ("3")) {
+                /*verificar se a pessoa logada é um usuário*/
+                if (session.getAttribute("level") == ("2")) {
                     /*permenece na página*/
                 } else {
                     response.sendRedirect("index.jsp");
@@ -23,7 +20,7 @@
             }
         %>
 
-        <title>Página do Administrador</title>
+        <title>Página do Usuário</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link rel="icon" href="img/favicon.png" />
@@ -33,10 +30,10 @@
             <center>
                 <ul>
                     <li>
-                        <a id="logoMenu" href="admin.jsp">    
+                        <a id="logoMenu" href="user.jsp">                 
                             <span>
                                 Fácilnvest                                
-                            </span>                    
+                            </span>                         
                         </a>
                     </li>
                     <li>
@@ -45,7 +42,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="admin.jsp" class="btnHeaderMenu" id="firstBtnHeaderMenu">
+                        <a href="user.jsp" class="btnHeaderMenu" id="firstBtnHeaderMenu">
                             <span class="spanMenu">Home</span>
                         </a>
                     </li>
@@ -63,28 +60,23 @@
         </nav>
 
         <div id="below">
-            <div id="boxMenu">
+            <div id="boxMenuUser">
                 <center>
                     <br>
                     <br>
+                    <!--
+                    <a class="btnMenu" href="cadastro_de_cliente.jsp">
+                        <span >Cadastrar Clientes</span>
+                    </a>-->
                     <br>
-                    <a class="btnMenu" href="cadastro_de_usuario.jsp">
-                        <span >Cadastrar Usuários</span>
+                    <br>
+                    <br>
+                    <a class="btnMenu" href="simulador.jsp">
+                        <span >Simulador</span>
                     </a>
                     <br>
-                    <br>
-                    <br>
-                    <a class="btnMenu" href="cadastro_de_investimento.jsp">
-                        <span >Cadastrar Investimentos</span>
-                    </a>
-                    <br>
-                    <br>
-                    <br>
-                    <a class="btnMenu" href="alteracao_de_taxas.jsp">
-                        <span >Alterar Taxas</span>
-                    </a>
                 </center>
             </div>
-        </div>      
+        </div>   
     </body>
 </html>
