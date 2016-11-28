@@ -27,6 +27,10 @@ public class Investimento {
     }
 
     public double getValorTotal() {
+        return calcularMensal();
+    }
+
+    private double calcularMensal() {
 
         double lucroPrimeiroMes = valor * (taxa / 100.0);
         double lucro = lucroPrimeiroMes + valor;
@@ -43,32 +47,13 @@ public class Investimento {
         Double LUCRO = Double.parseDouble(dx);
 
         return LUCRO;
+
     }
 
     public String getValorTotalString() {
         String temp = Double.toString(this.getValorTotal());
         temp = temp.replace(".", ",");
         return temp;
-    }
-
-    public double getValorTotal(Investimento inv) {
-
-        Investimento temp = new Investimento();
-
-        temp.setId(inv.getId());
-        temp.setNome(inv.getNome());
-        temp.setValor(inv.getValor());
-        temp.setValor_minimo(inv.getValor_minimo());
-        temp.setTaxa(inv.getTaxa());
-        temp.setTempo(inv.getTempo());
-
-        double lucroPrimeiroMes = temp.getValor() * (temp.getTaxa() / 100.0);
-        double lucro = lucroPrimeiroMes + temp.getValor();
-
-        for (int i = 1; i < temp.getTempo(); i++) {
-            lucro = lucro + (lucro * (temp.getTaxa() / 100.0));
-        }
-        return lucro;
     }
 
     /**
